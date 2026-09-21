@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김기창 | Bio Food Tech Operations</title>
+<meta name="description" content="농촌진흥청 바이오푸드테크팀 — 국가 농식품 R&D 기획·예산·성과 관리 업무 소개">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<style>
+/* ── 디자인 토큰 ────────────────────────────── */
+:root{
+  --bg:#05080f;
+  --bg-2:#0a0e1a;
+  --panel:rgba(14,22,38,.72);
+  --cyan:#00f0ff;
+  --magenta:#ff2e88;
+  --lime:#39ff14;
+  --text:#c9d7e6;
+  --text-dim:#7d8ea3;
+  --line:rgba(0,240,255,.22);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sans:'Pretendard',system-ui,sans-serif;
+  --speed:.5s;
+  --max:1120px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.75;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+/* 배경 그리드 + 스캔라인 */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,240,255,.045) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(0,240,255,.045) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:999;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);
+}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 16px;position:relative;z-index:1}
+
+/* ── HUD 상단바 ─────────────────────────────── */
+.hud{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;gap:14px;
+  padding:10px 16px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  color:var(--text-dim);
+  background:rgba(5,8,15,.82);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.hud .live{color:var(--lime);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.hud .dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.hud .sect{color:var(--cyan);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hud .pct{white-space:nowrap}
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--cyan),var(--lime));z-index:101;box-shadow:0 0 10px var(--cyan)}
+
+/* ── 섹션 공통 ──────────────────────────────── */
+section{padding:96px 0;position:relative}
+.label{
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+  color:var(--magenta);margin-bottom:10px;
+}
+h2{
+  font-size:clamp(26px,5vw,40px);font-weight:800;letter-spacing:-.02em;
+  color:#eaf4ff;margin-bottom:12px;
+}
+.lede{color:var(--text-dim);max-width:62ch;margin-bottom:40px;font-size:15px}
+
+/* 카드 + 코너 브래킷 */
+.card{
+  position:relative;padding:24px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(6px);
+  transition:border-color var(--speed),transform var(--speed),box-shadow var(--speed);
+}
+.card::before,.card::after{
+  content:'';position:absolute;width:14px;height:14px;
+  border:1px solid var(--cyan);transition:all var(--speed);
+}
+.card::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.card::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.card:hover,.card:focus-within{
+  border-color:rgba(0,240,255,.5);
+  transform:translateY(-3px);
+  box-shadow:0 0 30px rgba(0,240,255,.1);
+}
+.card:hover::before,.card:hover::after{width:22px;height:22px;box-shadow:0 0 10px var(--cyan)}
+
+/* ── 00 부팅/히어로 ─────────────────────────── */
+#boot{min-height:100vh;display:flex;align-items:center;padding-top:60px}
+.term{
+  font-family:var(--mono);font-size:12.5px;line-height:2;
+  color:var(--lime);margin-bottom:36px;min-height:112px;
+}
+.term .c{color:var(--text-dim)}
+.cursor{display:inline-block;width:8px;height:14px;background:var(--lime);vertical-align:-2px;animation:blink 1s steps(2) infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+.name{
+  font-size:clamp(48px,13vw,116px);font-weight:800;letter-spacing:-.045em;
+  line-height:.95;color:#fff;
+  text-shadow:2px 0 0 rgba(255,46,136,.55),-2px 0 0 rgba(0,240,255,.55);
+}
+.name-en{font-family:var(--mono);font-size:clamp(12px,2.6vw,18px);letter-spacing:.42em;color:var(--cyan);margin-top:14px}
+.role{margin-top:26px;font-size:clamp(14px,2.4vw,17px);color:var(--text)}
+.tagline{
+  margin-top:20px;font-size:clamp(17px,3.4vw,26px);font-weight:700;
+  color:#eaf4ff;line-height:1.5;max-width:20ch;
+}
+.tagline em{font-style:normal;color:var(--lime)}
+.scroll-cue{margin-top:52px;font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:.14em}
+.scroll-cue span{display:inline-block;animation:down 2s infinite}
+@keyframes down{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* ── 01 프로필 ──────────────────────────────── */
+.grid-2{display:grid;grid-template-columns:1fr;gap:28px}
+@media(min-width:840px){.grid-2{grid-template-columns:1fr 1fr;gap:40px}}
+.spec{font-family:var(--mono);font-size:12.5px;border-top:1px solid var(--line)}
+.spec div{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid rgba(0,240,255,.1)}
+.spec dt{color:var(--text-dim);min-width:88px;flex-shrink:0}
+.spec dd{color:var(--text);font-family:var(--sans);font-size:14px}
+.gauge{margin-bottom:20px}
+.gauge .g-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;margin-bottom:7px}
+.gauge .g-ko{color:var(--text)}
+.gauge .g-en{color:var(--text-dim)}
+.track{height:5px;background:rgba(0,240,255,.1);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--lime));box-shadow:0 0 10px rgba(57,255,20,.5);transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+
+/* ── 02 미션 카드 ───────────────────────────── */
+.missions{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:720px){.missions{grid-template-columns:1fr 1fr}}
+.m-code{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--magenta);display:flex;justify-content:space-between;align-items:center}
+.m-status{color:var(--lime);display:flex;align-items:center;gap:5px}
+.m-status i{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 6px var(--lime);animation:pulse 2s infinite;font-style:normal}
+.m-title{font-size:20px;font-weight:700;color:#eaf4ff;margin:12px 0 8px}
+.m-desc{font-size:14px;color:var(--text-dim);line-height:1.7}
+.m-tags{margin-top:16px;display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;padding:3px 9px;border:1px solid rgba(0,240,255,.25);color:var(--cyan)}
+
+/* ── 03 K-AltPro 노드맵 ─────────────────────── */
+.hub{
+  text-align:center;padding:20px;margin-bottom:30px;
+  border:1px solid rgba(57,255,20,.45);background:rgba(57,255,20,.05);
+}
+.hub .h-k{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--lime)}
+.hub .h-t{font-size:19px;font-weight:700;color:#eaf4ff;margin-top:6px}
+.hub .h-s{font-size:13px;color:var(--text-dim);margin-top:6px}
+.nodes{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:720px){.nodes{grid-template-columns:1fr 1fr}}
+.node{padding:18px 20px;border:1px solid var(--line);background:var(--panel);position:relative}
+.node .n-n{font-family:var(--mono);font-size:10.5px;color:var(--magenta);letter-spacing:.14em}
+.node .n-t{font-size:15.5px;font-weight:700;color:#eaf4ff;margin:7px 0 12px;line-height:1.5}
+.trl{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;color:var(--text-dim)}
+.pips{display:flex;gap:4px}
+.pip{width:15px;height:4px;background:rgba(0,240,255,.14)}
+.pip.on{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.pip.goal{background:var(--lime);box-shadow:0 0 6px var(--lime)}
+
+/* ── 04 파이프라인 ──────────────────────────── */
+.pipe{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:720px){.pipe{grid-template-columns:1fr 1fr}}
+.draft{
+  padding:22px;border:1px dashed rgba(0,240,255,.3);
+  background:rgba(10,14,26,.4);
+}
+.draft .d-s{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--text-dim)}
+.draft .d-t{font-size:17px;font-weight:700;color:#d6e6f5;margin:8px 0 8px}
+.draft .d-b{font-size:13.5px;color:var(--text-dim);line-height:1.7}
+.quote{
+  margin:44px 0 0;padding:28px 24px;
+  border-left:2px solid var(--lime);background:rgba(57,255,20,.04);
+  font-size:clamp(16px,3vw,21px);font-weight:700;color:#eaf4ff;line-height:1.65;
+}
+
+/* ── 05 툴킷 ────────────────────────────────── */
+.console{border:1px solid var(--line);background:rgba(5,8,15,.8)}
+.console .c-bar{
+  display:flex;align-items:center;gap:7px;padding:9px 14px;
+  border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--text-dim);
+}
+.console .c-bar i{width:9px;height:9px;border-radius:50%;font-style:normal}
+.console .c-body{padding:20px 16px;font-family:var(--mono);font-size:13px;line-height:2.25}
+.console .c-body div{display:flex;gap:10px;flex-wrap:wrap}
+.console .c-body .p{color:var(--lime);flex-shrink:0}
+.console .c-body .t{color:var(--text);font-family:var(--sans);font-size:14px}
+.caption{margin-top:20px;font-family:var(--mono);font-size:12.5px;color:var(--cyan);letter-spacing:.03em}
+
+/* ── 06 로그 ────────────────────────────────── */
+.log{border-left:1px solid var(--line);padding-left:26px;margin-left:5px}
+.entry{position:relative;padding-bottom:26px}
+.entry::before{
+  content:'';position:absolute;left:-31px;top:9px;
+  width:9px;height:9px;border-radius:50%;background:var(--bg);
+  border:1px solid var(--cyan);box-shadow:0 0 8px rgba(0,240,255,.6);
+}
+.entry .e-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--magenta)}
+.entry .e-t{font-size:15.5px;font-weight:700;color:#eaf4ff;margin:5px 0 5px}
+.entry .e-b{font-size:13.5px;color:var(--text-dim);line-height:1.7;max-width:64ch}
+
+/* ── 07 종료 ────────────────────────────────── */
+#end{text-align:center;padding-bottom:120px}
+.end-card{max-width:560px;margin:0 auto}
+.end-line{font-family:var(--mono);font-size:12.5px;color:var(--lime);margin-top:48px;letter-spacing:.1em}
+footer{border-top:1px solid var(--line);padding:26px 0;font-family:var(--mono);font-size:11px;color:var(--text-dim);text-align:center}
+
+/* ── 진입 애니메이션 ────────────────────────── */
+.rise{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rise.in{opacity:1;transform:none}
+
+/* ── 포커스 / 모션 감소 ─────────────────────── */
+a:focus-visible,button:focus-visible,.card:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+a{color:var(--cyan)}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+<div class="hud">
+  <span class="live"><span class="dot"></span>LIVE</span>
+  <span class="sect" id="hud-sect">// BOOT</span>
+  <span class="pct" id="hud-pct">000%</span>
+</div>
+
+<!-- ═══ 00 BOOT ═══ -->
+<section id="boot">
+  <div class="wrap">
+    <div class="term" id="term" aria-label="시스템 부팅 메시지"></div>
+    <h1 class="name">김기창</h1>
+    <div class="name-en">KIM GICHANG</div>
+    <p class="role">농촌진흥청 연구정책국 <strong>바이오푸드테크팀</strong> · 연구직</p>
+    <p class="tagline">연구실의 언어를<br><em>국가 예산의 언어로</em> 번역한다</p>
+    <div class="scroll-cue">SCROLL TO ACCESS <span>▼</span></div>
+  </div>
+</section>
+
+<!-- ═══ 01 PROFILE ═══ -->
+<section id="profile">
+  <div class="wrap">
+    <div class="rise">
+      <div class="label">// SECTION 01 :: OPERATOR PROFILE</div>
+      <h2>어떤 일을 하는가</h2>
+      <p class="lede">실험대가 아니라 설계도 위에서 일합니다. 흩어진 연구 수요를 하나의 국가 R&amp;D 사업으로 묶고, 예산 구조를 짜고, 성과를 검증하고, 부처와 기관 사이의 빈칸을 메웁니다.</p>
+    </div>
+    <div class="grid-2">
+      <div class="rise">
+        <dl class="spec">
+          <div><dt>AFFILIATION</dt><dd>농촌진흥청(RDA) 연구정책국</dd></div>
+          <div><dt>TEAM</dt><dd>바이오푸드테크팀</dd></div>
+          <div><dt>FUNCTION</dt><dd>R&amp;D 사업 기획 · 예산 · 성과 · 협업 · 기술이전</dd></div>
+          <div><dt>DOMAIN</dt><dd>대체단백 · 농산부산물 자원순환 · 마이크로바이옴 · 발효 · 정밀영양</dd></div>
+          <div><dt>ORIGIN</dt><dd>기능성 식품 소재 연구자 — 항염 기전 규명, 신규 식품원료 등록, 기술이전, 국제협력</dd></div>
+        </dl>
+      </div>
+      <div class="rise">
+        <div class="gauge"><div class="g-top"><span class="g-ko">사업 기획</span><span class="g-en">PROGRAM DESIGN</span></div><div class="track"><div class="fill" data-w="95"></div></div></div>
+        <div class="gauge"><div class="g-top"><span class="g-ko">예산 관리</span><span class="g-en">BUDGET CONTROL</span></div><div class="track"><div class="fill" data-w="92"></div></div></div>
+        <div class="gauge"><div class="g-top"><span class="g-ko">성과 평가</span><span class="g-en">PERFORMANCE EVAL</span></div><div class="track"><div class="fill" data-w="88"></div></div></div>
+        <div class="gauge"><div class="g-top"><span class="g-ko">기관 간 협업</span><span class="g-en">INTER-AGENCY LINK</span></div><div class="track"><div class="fill" data-w="90"></div></div></div>
+        <div class="gauge"><div class="g-top"><span class="g-ko">기술 이전</span><span class="g-en">TECH TRANSFER</span></div><div class="track"><div class="fill" data-w="82"></div></div></div>
+        <div class="gauge"><div class="g-top"><span class="g-ko">행정 자동화</span><span class="g-en">WORKFLOW AUTOMATION</span></div><div class="track"><div class="fill" data-w="85"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 02 MISSIONS ═══ -->
+<section id="missions">
+  <div class="wrap">
+    <div class="rise">
+      <div class="label">// SECTION 02 :: ACTIVE MISSIONS</div>
+      <h2>담당 사업</h2>
+      <p class="lede">각각은 수년에 걸친 국가 연구개발 프로그램입니다. 기획 단계의 논리 구성부터 예산 편성, RFP 설계, 성과지표 관리까지가 한 사람의 손을 거칩니다.</p>
+    </div>
+    <div class="missions">
+
+      <article class="card rise" tabindex="0">
+        <div class="m-code"><span>MSN-01</span><span class="m-status"><i></i>ACTIVE</span></div>
+        <h3 class="m-title">K-AltPro · 대체단백</h3>
+        <p class="m-desc">국산 식물성 단백 원료의 재배·품질·가공·발효, 그리고 하이브리드 배양육까지. 수입에 의존해 온 대체식품 소재의 국산 공급망을 처음부터 설계하는 다년도 프로그램.</p>
+        <div class="m-tags"><span class="tag">PLANT PROTEIN</span><span class="tag">FERMENTATION</span><span class="tag">CULTURED MEAT</span></div>
+      </article>
+
+      <article class="card rise" tabindex="0">
+        <div class="m-code"><span>MSN-02</span><span class="m-status"><i></i>ACTIVE</span></div>
+        <h3 class="m-title">농산부산물 Eco순환</h3>
+        <p class="m-desc">버려지던 농산부산물을 자원으로 되돌립니다. 연구개발과 동시에 재활용 촉진 법제화 검토, 순환경제 규제샌드박스 대응, 부산물 빅데이터 플랫폼 구조 설계를 병행.</p>
+        <div class="m-tags"><span class="tag">CIRCULAR ECONOMY</span><span class="tag">UPCYCLING</span><span class="tag">REGULATION</span></div>
+      </article>
+
+      <article class="card rise" tabindex="0">
+        <div class="m-code"><span>MSN-03</span><span class="m-status"><i></i>ACTIVE</span></div>
+        <h3 class="m-title">농생명 마이크로바이옴</h3>
+        <p class="m-desc">농업과 식품을 잇는 미생물 자원 기반 연구 프로그램. 눈에 보이지 않는 층위에서 작물과 식품과 사람의 대사를 연결합니다.</p>
+        <div class="m-tags"><span class="tag">MICROBIOME</span><span class="tag">BIO-RESOURCE</span></div>
+      </article>
+
+      <article class="card rise" tabindex="0">
+        <div class="m-code"><span>MSN-04</span><span class="m-status"><i></i>ACTIVE</span></div>
+        <h3 class="m-title">K-명주 세계화</h3>
+        <p class="m-desc">한국 전통주의 품질 기준과 세계화 기반을 구축합니다. 연구 성과가 산업으로 건너가도록 기업과의 협력 체계를 함께 설계.</p>
+        <div class="m-tags"><span class="tag">TRADITIONAL LIQUOR</span><span class="tag">GLOBALIZATION</span><span class="tag">MOU</span></div>
+      </article>
+
+      <article class="card rise" tabindex="0">
+        <div class="m-code"><span>MSN-05</span><span class="m-status"><i></i>PARALLEL</span></div>
+        <h3 class="m-title">지역 푸드 인프라 운영</h3>
+        <p class="m-desc">화성푸드통합지원센터의 예산·인사 제도 운영. 연구 정책과는 별개로 병행하는 소관 업무로, 지역 먹거리 기반 시설이 실제로 굴러가게 만드는 일.</p>
+        <div class="m-tags"><span class="tag">LOCAL FOOD</span><span class="tag">OPERATIONS</span></div>
+      </article>
+
+      <article class="card rise" tabindex="0">
+        <div class="m-code"><span>MSN-06</span><span class="m-status"><i></i>ACTIVE</span></div>
+        <h3 class="m-title">정책 조정 · 부처 협업</h3>
+        <p class="m-desc">푸드테크 산업 육성 기본계획 의견 제출, 타 부처 자문, 공공의 역할과 민간 영역의 경계 설정. 기관이 가진 역량이 정책 지형에서 제 위치를 찾도록 조정합니다.</p>
+        <div class="m-tags"><span class="tag">POLICY</span><span class="tag">INTER-MINISTRY</span></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 03 MISSION DETAIL ═══ -->
+<section id="detail">
+  <div class="wrap">
+    <div class="rise">
+      <div class="label">// SECTION 03 :: MISSION DETAIL — K-AltPro</div>
+      <h2>하나의 사업은 이렇게 생겼다</h2>
+      <p class="lede">대표 사업 하나를 펼쳐 봅니다. 여러 연구기관의 과제가 하나의 통합 플랫폼을 향해 묶이고, 각 과제는 기술성숙도(TRL) 목표를 공유합니다.</p>
+    </div>
+
+    <div class="hub rise">
+      <div class="h-k">◆ INTEGRATION HUB</div>
+      <div class="h-t">국산 식물성 단백 통합 플랫폼</div>
+      <div class="h-s">흩어진 과제의 데이터가 모이는 지점</div>
+    </div>
+
+    <div class="nodes">
+      <div class="node rise">
+        <div class="n-n">NODE 01</div>
+        <div class="n-t">국산 원료 통합정보 구축</div>
+        <div class="trl"><span>TRL</span><span class="pips"><i class="pip on"></i><i class="pip on"></i><i class="pip on"></i><i class="pip goal"></i></span><span>2 → 4</span></div>
+      </div>
+      <div class="node rise">
+        <div class="n-n">NODE 02</div>
+        <div class="n-t">원료 품질관리 및 생산·재배기술</div>
+        <div class="trl"><span>TRL</span><span class="pips"><i class="pip on"></i><i class="pip on"></i><i class="pip on"></i><i class="pip goal"></i></span><span>2 → 4</span></div>
+      </div>
+      <div class="node rise">
+        <div class="n-n">NODE 03</div>
+        <div class="n-t">차세대 식물성 신소재 및 제조기술</div>
+        <div class="trl"><span>TRL</span><span class="pips"><i class="pip on"></i><i class="pip on"></i><i class="pip on"></i><i class="pip goal"></i></span><span>2 → 4</span></div>
+      </div>
+      <div class="node rise">
+        <div class="n-n">NODE 04</div>
+        <div class="n-t">영양·품질 향상 발효기술</div>
+        <div class="trl"><span>TRL</span><span class="pips"><i class="pip on"></i><i class="pip on"></i><i class="pip on"></i><i class="pip goal"></i></span><span>2 → 4</span></div>
+      </div>
+      <div class="node rise">
+        <div class="n-n">NODE 05</div>
+        <div class="n-t">하이브리드 배양육 소재 안정화</div>
+        <div class="trl"><span>TRL</span><span class="pips"><i class="pip on"></i><i class="pip on"></i><i class="pip on"></i><i class="pip goal"></i></span><span>1 → 4</span></div>
+      </div>
+      <div class="node rise">
+        <div class="n-n">NODE 06</div>
+        <div class="n-t">국산 원료 생산–가공 연계 실용화</div>
+        <div class="trl"><span>TRL</span><span class="pips"><i class="pip on"></i><i class="pip on"></i><i class="pip on"></i><i class="pip goal"></i></span><span>2 → 4</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 04 PIPELINE ═══ -->
+<section id="pipeline">
+  <div class="wrap">
+    <div class="rise">
+      <div class="label">// SECTION 04 :: R&amp;D PIPELINE</div>
+      <h2>설계 중인 것들</h2>
+      <p class="lede">아직 도면 상태인 사업들. 사회적 문제에서 출발해 과제와 수단, 결과물의 활용 체계까지 논리를 세우는 단계입니다.</p>
+    </div>
+    <div class="pipe">
+      <div class="draft rise">
+        <div class="d-s">STATUS :: DRAFTING</div>
+        <div class="d-t">식품성분 데이터 고도화</div>
+        <div class="d-b">지금의 식품성분표는 '접시 기준'입니다. 소화흡수율, 조리 후 변화, 단백질의 질처럼 '몸 기준' 데이터로 다시 쓰는 방향.</div>
+      </div>
+      <div class="draft rise">
+        <div class="d-s">STATUS :: DRAFTING</div>
+        <div class="d-t">맞춤형 정밀영양 데이터 기반</div>
+        <div class="d-b">같은 음식도 사람마다 반응이 다릅니다. 그 차이를 설명할 수 있는 공공 데이터 인프라를 국가 R&amp;D로 세우는 구상.</div>
+      </div>
+      <div class="draft rise">
+        <div class="d-s">STATUS :: DRAFTING</div>
+        <div class="d-t">생분해성 농업용 소재</div>
+        <div class="d-b">농업 현장에 쌓이는 플라스틱 문제를 소재 단계에서 되돌리는 접근.</div>
+      </div>
+      <div class="draft rise">
+        <div class="d-s">STATUS :: DRAFTING</div>
+        <div class="d-t">K-Science 계열 기획</div>
+        <div class="d-b">전통주, 종자유, 치유음식 — 한국 고유 식문화 자원을 과학으로 재정의하는 제안 묶음.</div>
+      </div>
+    </div>
+    <blockquote class="quote rise">농산물 과잉은 해마다 온다. 그런데 연구 성과는 몇 해 뒤에 온다.<br>그 시차를 메우는 것이 데이터다.</blockquote>
+  </div>
+</section>
+
+<!-- ═══ 05 TOOLKIT ═══ -->
+<section id="toolkit">
+  <div class="wrap">
+    <div class="rise">
+      <div class="label">// SECTION 05 :: OPERATOR TOOLKIT</div>
+      <h2>직접 만든 도구들</h2>
+      <p class="lede">행정 업무는 반복됩니다. 반복되는 것은 자동화할 수 있습니다. 필요해서 직접 만들어 쓰는 것들.</p>
+    </div>
+    <div class="console rise">
+      <div class="c-bar"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i><span style="margin-left:8px">operator@rda:~/tools</span></div>
+      <div class="c-body">
+        <div><span class="p">$</span><span class="t">국가연구개발혁신법 RAG 챗봇 — 법령 질의를 근거 조항과 함께 응답</span></div>
+        <div><span class="p">$</span><span class="t">R&amp;D 예산 통합관리 DB — 흩어진 사업 예산을 한 장에서 추적</span></div>
+        <div><span class="p">$</span><span class="t">R&amp;D Compass — 사업 기획 질의응답 에이전트 제안</span></div>
+        <div><span class="p">$</span><span class="t">AI 인프라 도입 메모보고 — 기관 차원의 도구 도입 건의</span></div>
+        <div><span class="p">$</span><span class="t">문서 작성 스킬 · 워크플로 자동화 — Streamlit, Zapier, MCP 연동</span></div>
+      </div>
+    </div>
+    <p class="caption">&gt; 도구를 만드는 데 쓴 시간은, 보고서를 다시 쓰지 않아도 되는 시간으로 돌아온다.</p>
+  </div>
+</section>
+
+<!-- ═══ 06 FIELD LOG ═══ -->
+<section id="log">
+  <div class="wrap">
+    <div class="rise">
+      <div class="label">// SECTION 06 :: FIELD LOG</div>
+      <h2>책상 밖의 기록</h2>
+      <p class="lede">기획서는 현장에서 검증됩니다. 사무실 밖에서 쌓인 기록들.</p>
+    </div>
+    <div class="log">
+      <div class="entry rise">
+        <div class="e-k">LOG // INDUSTRY</div>
+        <div class="e-t">건강기능식품 사업화 실패 분석</div>
+        <div class="e-b">수백 건의 미사업화 사례를 놓고 업계 관계자를 직접 만났습니다. 기술이 아니라 그 다음 단계에서 끊긴다는 사실을 확인한 작업.</div>
+      </div>
+      <div class="entry rise">
+        <div class="e-k">LOG // POLICY</div>
+        <div class="e-t">푸드테크 산업 육성 기본계획 의견 제출</div>
+        <div class="e-b">소속 기관이 가진 역량이 정책 문서에서 잘 드러나지 않는 구조적 문제를 짚고, 부처 간 의견 조회에 대응했습니다.</div>
+      </div>
+      <div class="entry rise">
+        <div class="e-k">LOG // ADVISORY</div>
+        <div class="e-t">타 부처 푸드테크 자문</div>
+        <div class="e-b">공공이 해야 할 일과 민간이 이미 잘하는 일의 경계를 어디에 그을 것인가. 중복을 피하는 자문 의견을 구성했습니다.</div>
+      </div>
+      <div class="entry rise">
+        <div class="e-k">LOG // REGULATION</div>
+        <div class="e-t">순환경제 규제샌드박스 기업 교육자료</div>
+        <div class="e-b">제도를 아는 것과 쓸 수 있는 것은 다릅니다. 기업이 실제로 신청까지 갈 수 있도록 절차를 풀어 쓴 자료를 준비했습니다.</div>
+      </div>
+      <div class="entry rise">
+        <div class="e-k">LOG // OUTREACH</div>
+        <div class="e-t">산업계 행사 발표</div>
+        <div class="e-b">바이오 산업 현장에서 공공 R&amp;D의 방향을 설명하고 수요를 되받아 왔습니다.</div>
+      </div>
+      <div class="entry rise">
+        <div class="e-k">LOG // READINESS</div>
+        <div class="e-t">비상 대비 상황조치 계획</div>
+        <div class="e-b">연구 기획과는 다른 결의 업무. 기관이 멈추지 않도록 준비해 두는 일.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 07 END ═══ -->
+<section id="end">
+  <div class="wrap">
+    <div class="card end-card rise">
+      <div class="label" style="margin-bottom:14px">// SECTION 07 :: CONTACT</div>
+      <h2 style="font-size:24px">연결</h2>
+      <p style="color:var(--text-dim);font-size:14px;margin-top:10px">
+        농촌진흥청 연구정책국 바이오푸드테크팀<br>
+        대체단백 · 농산부산물 자원순환 · 마이크로바이옴 · 정밀영양
+      </p>
+      <p style="margin-top:20px;font-family:var(--mono);font-size:12px;color:var(--text-dim)">
+        CONTACT :: <span style="color:var(--cyan)">[ 연락처를 여기에 입력 ]</span>
+      </p>
+    </div>
+    <div class="end-line rise">&gt; SESSION END. STAY CURIOUS.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">RDA BIO-FOOD TECH OPERATIONS TERMINAL · 본 페이지는 개인이 제작한 업무 소개 페이지로, 소속 기관의 공식 입장이 아닙니다.</div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── 부팅 타이핑 ───────────────────────── */
+  var lines = [
+    '<span class="c">&gt;</span> RDA_BIOFOODTECH_TERMINAL',
+    '<span class="c">&gt;</span> AUTHENTICATING OPERATOR... OK',
+    '<span class="c">&gt;</span> CLEARANCE: PLANNING / BUDGET / PERFORMANCE',
+    '<span class="c">&gt;</span> WELCOME, OPERATOR.'
+  ];
+  var term = document.getElementById('term');
+  if (reduce) {
+    term.innerHTML = lines.join('<br>');
+  } else {
+    var li = 0;
+    (function nextLine(){
+      if (li >= lines.length) {
+        term.innerHTML = lines.join('<br>') + '<span class="cursor"></span>';
+        return;
+      }
+      var full = lines[li], txt = full.replace(/<[^>]+>/g,''), i = 0;
+      var prefix = lines.slice(0, li).join('<br>') + (li ? '<br>' : '');
+      var id = setInterval(function(){
+        i++;
+        term.innerHTML = prefix + txt.slice(0, i) + '<span class="cursor"></span>';
+        if (i >= txt.length) {
+          clearInterval(id);
+          term.innerHTML = lines.slice(0, li + 1).join('<br>') + '<span class="cursor"></span>';
+          li++;
+          setTimeout(nextLine, 130);
+        }
+      }, 16);
+    })();
+  }
+
+  /* ── 진입 애니메이션 + 게이지 ──────────── */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.fill').forEach(function(f){
+        f.style.width = f.dataset.w + '%';
+      });
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.rise').forEach(function(el){ io.observe(el); });
+
+  /* ── HUD ───────────────────────────────── */
+  var names = {
+    boot:'BOOT', profile:'OPERATOR PROFILE', missions:'ACTIVE MISSIONS',
+    detail:'MISSION DETAIL', pipeline:'R&D PIPELINE', toolkit:'OPERATOR TOOLKIT',
+    log:'FIELD LOG', end:'CONTACT'
+  };
+  var sects = Array.prototype.slice.call(document.querySelectorAll('section'));
+  var bar = document.getElementById('bar');
+  var hs = document.getElementById('hud-sect');
+  var hp = document.getElementById('hud-pct');
+  var ticking = false;
+  function update(){
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    bar.style.width = (p * 100) + '%';
+    hp.textContent = String(Math.round(p * 100)).padStart(3, '0') + '%';
+    var cur = sects[0];
+    sects.forEach(function(s){ if (s.getBoundingClientRect().top <= 120) cur = s; });
+    hs.textContent = '// ' + (names[cur.id] || cur.id.toUpperCase());
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+</body>
+</html>
